@@ -39,13 +39,22 @@ public class HelloWorldController {
 
     // http://localhost:8091/hello-world/download
 
-    @GetMapping(value = "/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    // produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
+    @GetMapping(value = "/download", produces = MediaType.APPLICATION_PDF_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public void helloWorldPdfDownload(HttpServletResponse response) {
+        String filename = "hello-world.pdf";
+        // Adding this header tells the browser to download as an attachment
+        String contentDisposition = MessageFormat.format("attachment; filename={0}", filename);
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, contentDisposition);
+
+        // Removing "attachment" displays the pdf in the browser, but now I don't know how to change the name
+//        String contentDisposition = MessageFormat.format("filename={0}", filename);
+
         try (ServletOutputStream out = response.getOutputStream()) {
             PdfWriter writer = new PdfWriter(out);
-            tutorialDocumentCreator.createHelloWorldDocument(writer);
+            tutorialDocumentCreator.createFillableForm(writer);
 
             response.flushBuffer();
         } catch (IOException ioException){
@@ -53,18 +62,5 @@ public class HelloWorldController {
             ioException.printStackTrace();
         }
     }
-//
-//
-//    @RequestMapping(value="/displayProcessFile/{processInstanceId}", method=RequestMethod.GET)
-//    public ResponseEntity<byte[]> displayProcessFile(@PathVariable String processInstanceId) throws UnauthorizedUserAccessException{
-//        Document document = new Document(pdf);
-//        document.add(new Paragraph("Hello World!"));
-//        document.close();
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.parseMediaType("application/pdf"));
-//        headers.add("content-disposition", "attachment;filename=" + processFile.getDocName());
-//        ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(processFile.getContent(), headers, HttpStatus.OK);
-//        return response;
-//    }
+
 }
