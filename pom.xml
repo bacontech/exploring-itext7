@@ -15,6 +15,7 @@
 	<description>Demo project for iText7 Core</description>
 	<properties>
 		<java.version>11</java.version>
+		<itext.version>7.2.1</itext.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -26,6 +27,12 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itext7-core</artifactId>
+      <version>${itext.version}</version> <!-- latest at this moment 1/21/22-->
+			<type>pom</type>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
