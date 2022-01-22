@@ -14,21 +14,34 @@ import com.itextpdf.layout.properties.TextAlignment;
 import org.springframework.stereotype.Service;
 import com.itextpdf.kernel.geom.Rectangle;
 
+import java.util.Map;
+
 
 @Service
 public class TutorialDocumentCreator {
 
-    public void createHelloWorldDocument(PdfWriter writer) {
-        PdfDocument pdf = new PdfDocument(writer);
-        Document document = new Document(pdf);
+    public void createHelloWorldDocument(Document document) {
+
         document.add(new Paragraph("Hello World!"));
         document.close();
     }
 
+    public void fillOutApplication(PdfDocument pdf) {
+        PdfAcroForm form = PdfAcroForm.getAcroForm(pdf, true);
+        Map<String, PdfFormField> fields = form.getFormFields();
+        fields.get("name").setValue("James Bond");
+        fields.get("language").setValue("English");
+        fields.get("experience1").setValue("Off");
+        fields.get("experience2").setValue("Yes");
+        fields.get("experience3").setValue("Yes");
+        fields.get("shift").setValue("Any");
+        fields.get("info").setValue("I was 38 years old when I became an MI6 agent.");
+
+        pdf.close();
+    }
+
     // AcroForm
-    public void createFillableForm(PdfWriter writer) {
-        PdfDocument pdf = new PdfDocument(writer);
-        Document doc = new Document(pdf);
+    public void createFillableAppForm(Document doc) {
 
         Paragraph title = new Paragraph("Application for employment")
             .setTextAlignment(TextAlignment.CENTER)
